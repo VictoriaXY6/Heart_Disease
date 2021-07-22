@@ -1,0 +1,81 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<script>
+    //to keep track of number of sections added
+    var count = "{{ sections|length }}";
+    //end point
+    var url = "/edit";
+    //form id
+    var form_id = "#edit_post";
+</script>
+
+<script src="{{ url_for('blog.static', filename='js/dynamic_field.js') }}"></script>
+
+{% include 'components/flash_message.html' %}
+
+{% include 'components/title.html' %}
+
+<form method="POST" enctype="multipart/form-data" id="edit_post">
+    <div id="InputsWrapper">
+
+        <div class="mb-3">
+            <label for="blog_title" class="form-label">Title</label>
+            <input type="text" id="blog_title" name="blog_title" placeholder="Post title" class="form-control"
+                value="{{ request.form.get('blog_title') or post['title'] }}" required>
+        </div>
+
+        {% for subtitle, content in sections.items() %}
+            {% set subtitle_id = 'blog_subtitle_' ~ loop.index %}
+            {% set content_id = 'blog_content_' ~ loop.index %}
+            {% if loop.index == 1 %}
+                <div>
+                    <hr>
+                    <div class="mb-3">
+                        <label for="{{subtitle_id}}" class="form-label">Subtitle#1 (Optional)</label>
+                        <input type="text" id="{{subtitle_id}}" name="blog_subtitles" placeholder="Post Subtitle"
+                            class="form-control" value="{{ subtitle }}">
+                    </div>
+                    <div class="mb-3">
+                        <label for="{{content_id}}" class="form-label">Content#1</label>
+                        <textarea name="blog_contents" id="{{content_id}}" placeholder="Post content" class="form-control"
+                            rows="10">{{ content }}</textarea>
+                    </div>
+                </div>
+            {% else %}
+                <div>
+                    <hr>
+                    <div class="mb-3">
+                        <label for="{{subtitle_id}}" class="form-label">Subtitle#{{ loop.index }} (required)</label>
+                        <input type="text" id="{{subtitle_id}}" name="blog_subtitles" placeholder="Post Subtitle"
+                            class="form-control" value="{{ subtitle }}" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="{{content_id}}" class="form-label">Content#{{ loop.index }}</label>
+                        <textarea name="blog_contents" id="{{content_id}}" placeholder="Post content" class="form-control"
+                            rows="10">{{ content }}</textarea>
+                    </div>
+                </div>
+            {% endif%}
+        {% endfor %}
+
+    </div>
+
+    {% include 'components/button_list.html' %}
+
+</form>
+
+<hr>
+
+<div class="d-flex flex-row">
+    <a class="btn btn-primary" href="{{url_for('main.profile')}}" onclick="return confirm('Your data will be lose')">
+        Go Back
+    </a>
+    <form action="{{ url_for('blog.delete', post_id=post['id']) }}" method="POST" class="ms-4">
+        <input type="submit" value="Delete Post" class="btn btn-danger btn btn-primary"
+            onclick="return confirm('Are you sure you want to delete this post?')">
+    </form>
+</div>
+
+{% endblock %}

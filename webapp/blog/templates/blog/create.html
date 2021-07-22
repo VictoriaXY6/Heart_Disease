@@ -1,0 +1,66 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+
+<script>
+    //to keep track of number of sections added
+
+    var count = "{{ request.form.getlist('blog_subtitles')|length or 1 }}";
+    //end point
+    var url = "/create";
+    //form id
+    var form_id = "#create_post";
+</script>
+
+<script src="{{ url_for('blog.static', filename='js/dynamic_field.js') }}"></script>
+
+{% include 'components/flash_message.html' %}
+
+
+{% include 'components/title.html' %}
+
+<form method="POST" action="/create" enctype="multipart/form-data" id="create_post">
+    <div id="InputsWrapper">
+        <div class="mb-3">
+            <label for="blog_title" class="form-label">Title</label>
+            <input type="text" id="blog_title" name="blog_title" placeholder="Post Title" class="form-control"
+                value="{{ request.form.get('blog_title') or '' }}" required>
+        </div>
+
+        <div>
+            <hr>
+            <div class="mb-3">
+                <label for="blog_subtitle_1" class="form-label">Subtitle#1 (Optional)</label>
+                <input type="text" id="blog_subtitle_1" name="blog_subtitles" placeholder="Post Subtitle"
+                    class="form-control" value="{{ request.form.getlist('blog_subtitles')[0] or '' }}">
+            </div>
+            <div class="mb-3">
+                <label for="blog_content_1" class="form-label">Content#1</label>
+                <textarea name="blog_contents" id="blog_content_1" placeholder="Post content" class="form-control"
+                    rows="10">{{ request.form.getlist('blog_contents')[0] }}</textarea>
+            </div>
+        </div>
+
+        {% set length = request.form.getlist('blog_subtitles')|length or 1 %}
+        {% for i in range(1, length) %}
+            <div>
+                <hr>
+                <div class="mb-3">
+                    <label for="blog_subtitle_{{i+1}}" class="form-label">Subtitle#{{i+1}} (required)</label>
+                    <input type="text" id="blog_subtitle_{{i+1}}" name="blog_subtitles" placeholder="Post Subtitle"
+                        class="form-control" value="{{ request.form.getlist('blog_subtitles')[i] or '' }}" required>
+                </div>
+                <div class="mb-3">
+                    <label for="blog_content_{{i+1}}" class="form-label">Content#{{i+1}}</label>
+                    <textarea name="blog_contents" id="blog_content_{{i+1}}" placeholder="Post content" class="form-control"
+                        rows="10">{{ request.form.getlist('blog_contents')[i] }}</textarea>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+
+    {% include 'components/button_list.html' %}
+
+</form>
+{% endblock %}

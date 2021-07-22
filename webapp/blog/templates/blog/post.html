@@ -1,0 +1,29 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+{% include 'components/title.html' %}
+
+{% if post['image_file'] is not none %}
+<div class="text-center mb-4">
+    <img src="{{ url_for('blog.static', filename = add_id('blog_imgs/' ~ post['image_file'], post['id'])) }}" class="w-50 h-50" alt="Responsive image">
+</div>
+{% endif %}
+
+
+<span class="badge bg-primary">Created By {{ post['created_date'] }}</span>
+<span class="badge bg-primary">Updated By {{ post['updated_date'] }}</span>
+<span class="badge bg-info mb-3">By {{ author['name'] }} </span>
+<article class="blog-post">
+    {% for subtitle, content in sections.items() %}
+        {% if loop.index == 1 and subtitle == '' %}
+            <p style="white-space: pre-line"> {{ content }} </p>
+        {% else %}
+            <h3> {{ subtitle }} </h3>
+            <p style="white-space: pre-line"> {{ content }} </p>
+        {% endif %}
+    {% endfor %}
+</article>
+
+
+{% endblock %}

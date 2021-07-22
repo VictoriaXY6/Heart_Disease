@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+
+{% include 'components/flash_message.html' %}
+
+<form class="form-signin text-center m-auto mt-5 w-50" method="POST" action="/signup">
+
+    <img class="mb-4 w-25 h-25" src="{{ url_for('auth.static', filename='images/icon.jpg') }}" alt="">
+        
+    <h1 class="h3 mb-3 fw-normal">Please sign up</h1>
+    <div class="form-floating">
+        <input type="email" id="inputEmail" name="email" class="form-control" placeholder="Email address" required
+            autofocus>
+        <label for="inputEmail">Email address</label>
+    </div>
+    <br>
+    <div class="form-floating">
+        <input type="text" id="inputName" name="name" class="form-control" placeholder="name" required>
+        <label for="inputName">Name</label>
+    </div>
+    <br>
+    <div class="form-floating">
+        <input type="password" id="inputPassword" name="password" class="form-control" placeholder="Password" required>
+        <label for="inputPassword">Password</label>
+    </div>
+    <button class="btn btn-lg btn-primary btn-block mt-3" type="submit">Sign in</button>
+</form>
+
+{% endblock %}

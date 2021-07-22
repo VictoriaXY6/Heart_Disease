@@ -1,0 +1,34 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+{% include 'components/title.html' %}
+<div class="text-center mb-4">
+  <img src="{{ url_for('main.static', filename = '/images/about.jpg') }}" class="w-50 h-50" alt="Responsive image">
+</div>
+
+
+<dl class="row">
+  {% for section in page['content'] %}
+    <dt class="col-sm-3"> {{ section['header'] }} </dt>
+    <dd class="col-sm-9"> 
+      {% for key, value in section.items() %}
+        {% if 'content' in key %}
+          {{ section[key] }}
+          <br>
+          <br>
+        {% elif 'bullet_point' in key %}
+          <ul>
+            {% for point in section[key] %}
+            <li> {{point}} </li>
+            {% endfor %}
+          </ul>
+        {% endif %}
+      {% endfor %}
+    </dd>
+  {% endfor %}
+</dl>
+
+{% endblock %}
+
+
